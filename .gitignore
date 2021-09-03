@@ -1,0 +1,7 @@
+venv
+tables
+data
+spark-warehouse
+dl.cfg
+.DS_Store
+
