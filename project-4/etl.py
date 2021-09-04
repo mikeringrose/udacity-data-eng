@@ -21,7 +21,6 @@ def create_spark_session():
         .getOrCreate()
     return spark
 
-
 def process_song_data(spark, input_data, output_data):
     # get filepath to song data file
     song_data = input_data
@@ -55,7 +54,6 @@ def process_song_data(spark, input_data, output_data):
     artists_table_path = f"{output_data}artists_table.parquet"    
     artists_table = artists_table.write.mode("overwrite").parquet(artists_table_path)
 
-
 def process_log_data(spark, input_data_logs, input_data_songs, output_data):
     # get filepath to log data file
     log_data = input_data_logs
@@ -74,7 +72,7 @@ def process_log_data(spark, input_data_logs, input_data_songs, output_data):
         df_filtered.lastName.alias("last_name"),
         df_filtered.level,
         df_filtered.gender
-    )
+    ).orderBy(df.user_id).distinct()
     
     # write users table to parquet files
     users_table_path = f"{output_data}users_table.parquet"
