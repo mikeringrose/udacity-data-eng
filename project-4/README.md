@@ -22,3 +22,23 @@ to provide simple joins and simple queries to support various analytics requests
 
 ## ETL Pipeline
 
+To build the data lake, the ETL process works two set of data -- songs and logs. As part of the ETL process all column names have been standardized to be lower cased and in snakecase format. All tables are written out as parquet files as it is a columnar file storage that is efficient in his size and in it's ability to perform data aggregations.
+### songs data
+1. extracts the raw song data 
+2. creates a song table extracting the fields -- song_id, title, artist_id, year, and duration
+3. writes the song data to a parquet file that is partitioned by year and artist id
+4. creates an artist table extracting the the fields -- artist_id, name, location, latitude, longitude
+5. the artist table is then written out a parquet file, but not partitioned as the data will be relatively small
+
+### log data
+1. extracts and process log files
+2. as only the song plays are of interest a DataFrame is created where the page is equal to "NextSong"
+3. the users table is created from the log file with only distinct rows being added to the table
+4. the users table is written to a parquet file and indexed as the size of the data is relatively small
+5. the time table is created next extracting a proper timestamp column and the individual components of the date pre-computed to make querying the data easier
+6. lastly the songplays table which represent an indiviual play of song is derived by joining the log entries on the songs table
+7. the songplays table is partition by year and month
+
+## Sample Queries
+
+
