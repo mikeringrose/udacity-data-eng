@@ -8,7 +8,7 @@ This project requires Python 3 and to get started following the steps below:
 
 1. Copy `dl.example.cfg` to `dl.cfg`
   * if running locally please specify local paths for `INPUT_DATA_SONGS`, `INPUT_DATA_LOGS`, `OUTPUT_DATA`
-  * if running on AWS replace the keys `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` with you AWS credentials
+  * if running on AWS replace the keys `AWS_ACCESS_KEY_ID` and `AWS_SECRET_ACCESS_KEY` with your AWS credentials
 2. Install the project requirements running `pip install -r requirements.txt`
 3. Run `python etl.py (aws|local)`
 
