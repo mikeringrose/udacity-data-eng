@@ -193,6 +193,10 @@ def main():
 
     if len(sys.argv) == 2:
         workspace = sys.argv[1].upper()
+
+    if workspace not in ["LOCAL", "AWS"]:
+        print("error: script should be run like the following:\n\tpython etl.py (aws|local)")
+        sys.exit(1)
     
     if workspace == "AWS":
         os.environ['AWS_ACCESS_KEY_ID']=config["AWS"]["AWS_ACCESS_KEY_ID"]
