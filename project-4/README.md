@@ -43,4 +43,6 @@ To build the data lake, the ETL process works two set of data -- songs and logs.
 
 ## Sample Queries
 
-
+The code performs two sample queries:
+1. a breakdown of songplay by hour and gender
+2. a count of mobile users vs desktop users
