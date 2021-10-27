@@ -3,7 +3,15 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 class LoadDimensionOperator(BaseOperator):
+    r"""
+    Copies data from the staging tables to dimension tables.
 
+    :param redshift_conn_id: the ID of the Redshift connection
+    :param aws_credentials_id: the ID of the AWS credentials to be used
+    :param table: the table to populate
+    :param query: a SQL to extract the data from the staging tables
+    :param append: boolean that determines if the table should be truncated before insert
+    """
     ui_color = '#80BD9E'
 
     insert_sql_template = """

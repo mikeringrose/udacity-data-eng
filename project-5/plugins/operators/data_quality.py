@@ -3,7 +3,12 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 class DataQualityOperator(BaseOperator):
+    r"""
+    Checks that the supplied tables contain data.
 
+    :param redshift_conn_id: the ID of the Redshift connection
+    :param tables: an array of tables to check do some basic checks
+    """
     ui_color = '#89DA59'
 
     @apply_defaults

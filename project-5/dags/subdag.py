@@ -1,8 +1,3 @@
-#Instructions
-#In this exercise, we’ll place our S3 to RedShift Copy operations into a SubDag.
-#1 - Consolidate HasRowsOperator into the SubDag
-#2 - Reorder the tasks to take advantage of the SubDag Operators
-
 import datetime
 
 from airflow import DAG
@@ -10,6 +5,9 @@ from airflow.operators.postgres_operator import PostgresOperator
 from airflow.operators import (LoadDimensionOperator, DataQualityOperator)
 from helpers import SqlQueries
 
+"""
+A subdag that populates a single dimension table and then performs data quality checks on that table
+"""
 def get_load_dimension_dag(
         parent_dag_name,
         task_id,

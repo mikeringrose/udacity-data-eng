@@ -8,17 +8,21 @@ from airflow.operators import (StageToRedshiftOperator, LoadFactOperator,
                                 LoadDimensionOperator, DataQualityOperator)
 from helpers import SqlQueries
 
-# AWS_KEY = os.environ.get('AWS_KEY')
-# AWS_SECRET = os.environ.get('AWS_SECRET')
+"""
+This DAG populates the Sparkify Data warehouse performing the following tasks:
+* Staging the data from S3
+* Loading the songplays fact table
+* Performing data quality checks on the fact table
+* Loading the supporting dimension tables and performing data quality check on each via a subdag
+The dag starts loading data at 2018-01-11. If the data fails it will retry 3 times with a 5 minutes delay
+"""
 
-start_date = datetime(2019, 1, 12)
-end_date = datetime(2019, 1, 12)
+start_date = datetime(2018, 1, 11)
 
 default_args = {
     'owner': 'udacity',
     'depends_on_past': False,
     'start_date': start_date,
-    'end_date': start_date,
     'retries': 3,
     'retry_delay': timedelta(minutes=5),
     'catchup_by_default': False
@@ -71,8 +75,7 @@ load_user_dimension_table = SubDagOperator(
         "redshift",
         "users",
         SqlQueries.user_table_insert,
-        start_date=start_date,
-        end_date=end_date
+        start_date=start_date
     ),
     task_id="Load_user_dim_table",
     dag=dag,
@@ -85,8 +88,7 @@ load_song_dimension_table = SubDagOperator(
         "redshift",
         "songs",
         SqlQueries.song_table_insert,
-        start_date=start_date,
-        end_date=end_date
+        start_date=start_date
     ),
     task_id="Load_song_dim_table",
     dag=dag,
@@ -99,8 +101,7 @@ load_artist_dimension_table = SubDagOperator(
         "redshift",
         "artists",
         SqlQueries.artist_table_insert,
-        start_date=start_date,
-        end_date=end_date
+        start_date=start_date
     ),
     task_id="Load_artist_dim_table",
     dag=dag,
@@ -113,8 +114,7 @@ load_time_dimension_table = SubDagOperator(
         "redshift",
         "time",
         SqlQueries.time_table_insert,
-        start_date=start_date,
-        end_date=end_date
+        start_date=start_date
     ),
     task_id="Load_time_dim_table",
     dag=dag,

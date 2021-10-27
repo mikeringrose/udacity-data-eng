@@ -3,7 +3,14 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 class LoadFactOperator(BaseOperator):
+    r"""
+    Copies data from the staging tables to a fact table.
 
+    :param redshift_conn_id: the ID of the Redshift connection
+    :param aws_credentials_id: the ID of the AWS credentials to be used
+    :param table: the table to populate
+    :param query: a SQL to extract the data from the staging tables
+    """
     ui_color = '#F98866'
 
     insert_sql_template = """

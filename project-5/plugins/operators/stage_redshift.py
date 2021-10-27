@@ -4,6 +4,19 @@ from airflow.models import BaseOperator
 from airflow.utils.decorators import apply_defaults
 
 class StageToRedshiftOperator(BaseOperator):
+    r"""
+    Copies data from an S3 bucket and stages it in Redshift.
+
+    :param redshift_conn_id: the ID of the Redshift connection
+    :param aws_credentials_id: the ID of the AWS credentials to be used
+    :param table: the table to populate
+    :param s3_bucket: the bucket that holds the data
+    :param s3_key: the S3 key to the file that holds the data
+    :param file_type: json or csv
+    :param json_path: for JSON files, the path file that describe the data, defaults to "auto"
+    :param delimiter: CSV file delimiter
+    :param ignore_headers: should the header be skipped for a CSV
+    """
     ui_color = '#358140'
     
     copy_sql_json = """
