@@ -1,7 +1,22 @@
-venv
-tables
-data
-spark-warehouse
-dl.cfg
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# mac stuff
 .DS_Store
+
+# virutal env
+venv
+
+# logs
+logs/
+
+# random project ignores
+data
+tables
+dl.cfg
 dwh.cfg
+project_5.cfg
+spark-warehouse
