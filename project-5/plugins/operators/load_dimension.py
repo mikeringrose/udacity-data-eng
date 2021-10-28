@@ -47,13 +47,13 @@ class LoadDimensionOperator(BaseOperator):
         redshift = PostgresHook(postgres_conn_id=self.redshift_conn_id)
         
         if self.append:
-            self.log.info(f"Truncating and inserting data into the {table} dimension table...")
+            self.log.info(f"Truncating and inserting data into the {self.table} dimension table...")
             formatted_sql = LoadDimensionOperator.insert_sql_template.format(
                 self.table,
                 self.query
             )
         else:
-            self.log.info(f"Inserting data into the {table} dimension table...")
+            self.log.info(f"Inserting data into the {self.table} dimension table...")
             formatted_sql = LoadDimensionOperator.truncate_insert_sql_template.format(
                 self.table,
                 self.table,
