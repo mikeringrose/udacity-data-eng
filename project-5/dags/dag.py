@@ -17,12 +17,14 @@ This DAG populates the Sparkify Data warehouse performing the following tasks:
 The dag starts loading data at 2018-01-11. If the data fails it will retry 3 times with a 5 minutes delay
 """
 
-start_date = datetime(2018, 1, 11)
+start_date = datetime(2019, 1, 12)
+end_date = datetime(2019, 1, 12)
 
 default_args = {
     'owner': 'udacity',
     'depends_on_past': False,
     'start_date': start_date,
+    'end_date': end_date,
     'retries': 3,
     'retry_delay': timedelta(minutes=5),
     'catchup_by_default': False
@@ -68,6 +70,29 @@ load_songplays_table = LoadFactOperator(
     dag=dag
 )
 
+run_songplays_quality_checks = DataQualityOperator(
+    task_id='Run_songplays_quality_checks',
+    redshift_conn_id="redshift",
+    checks=[
+        {
+            'test_sql': SqlQueries.songplay_table_rowcounts,
+            'comparison': 'gt',
+            'value': 0
+        },
+        {
+            'test_sql': SqlQueries.songplay_table_check_null_start_time,
+            'comparison': 'eq',
+            'value': 0
+        },
+        {
+            'test_sql': SqlQueries.songplay_table_check_null_user_id,
+            'comparison': 'eq',
+            'value': 0
+        }
+    ],
+    dag=dag
+)
+
 load_user_dimension_table = SubDagOperator(
     subdag=get_load_dimension_dag(
         dag_id,
@@ -75,7 +100,8 @@ load_user_dimension_table = SubDagOperator(
         "redshift",
         "users",
         SqlQueries.user_table_insert,
-        start_date=start_date
+        start_date=start_date,
+        end_date=end_date
     ),
     task_id="Load_user_dim_table",
     dag=dag,
@@ -88,7 +114,8 @@ load_song_dimension_table = SubDagOperator(
         "redshift",
         "songs",
         SqlQueries.song_table_insert,
-        start_date=start_date
+        start_date=start_date,
+        end_date=end_date
     ),
     task_id="Load_song_dim_table",
     dag=dag,
@@ -101,7 +128,8 @@ load_artist_dimension_table = SubDagOperator(
         "redshift",
         "artists",
         SqlQueries.artist_table_insert,
-        start_date=start_date
+        start_date=start_date,
+        end_date=end_date
     ),
     task_id="Load_artist_dim_table",
     dag=dag,
@@ -114,17 +142,11 @@ load_time_dimension_table = SubDagOperator(
         "redshift",
         "time",
         SqlQueries.time_table_insert,
-        start_date=start_date
+        start_date=start_date,
+        end_date=end_date
     ),
     task_id="Load_time_dim_table",
     dag=dag,
-)
-
-run_songplays_quality_checks = DataQualityOperator(
-    task_id='Run_songplays_quality_checks',
-    redshift_conn_id="redshift",
-    tables=["songplays"],
-    dag=dag
 )
 
 end_operator = DummyOperator(task_id='Stop_execution',  dag=dag)

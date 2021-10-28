@@ -20,6 +20,12 @@ def get_load_dimension_dag(
         **kwargs
     )
 
+    check_rows = {
+        "test_sql": f"SELECT COUNT(*) FROM {table}",
+        "comparison": "gt",
+        "value": 0
+    }
+
     load_dimension_table = LoadDimensionOperator(
         task_id=f"Load_{table}_dim_table",
         redshift_conn_id=redshift_conn_id,
@@ -31,7 +37,7 @@ def get_load_dimension_dag(
     run_quality_checks = DataQualityOperator(
         task_id=f"Run_{table}_data_quality_checks",
         redshift_conn_id=redshift_conn_id,
-        tables=[table],
+        checks=[check_rows],
         dag=dag
     )    
 
