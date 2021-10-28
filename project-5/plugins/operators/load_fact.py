@@ -36,5 +36,5 @@ class LoadFactOperator(BaseOperator):
             self.table,
             self.query
         )
-        self.log.info(f"Loading data into the {table} fact table...")
+        self.log.info(f"Loading data into the {self.table} fact table...")
         redshift.run(formatted_sql)
